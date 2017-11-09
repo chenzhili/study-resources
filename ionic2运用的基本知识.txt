@@ -1,0 +1,105 @@
+1、js和ts的类，在构造器里申明和在构造器外对应值的意义，为啥construtor内的赋值会报错
+这种写法是对的：
+export class NotabsPage implements OnInit{
+  public params:any;
+  constructor(public navParams :NavParams){
+    this.params = this.navParams.get("name");
+  }
+  NgOnInit(){
+  	
+  }
+}
+这种写法为什么是错的:
+export class NotabsPage implements OnInit{
+/*  public params:any;*/
+  constructor(public navParams :NavParams,public params:any){
+    this.params = this.navParams.get("name");
+  }
+  NgOnInit(){
+  	
+  }
+}
+
+2、明天一定要总结有关ionic2中页面构造的的简单总结，特别在理解 功能模块中，加载多个组件为啥不行；
+	解决的理论：
+  根本问题是，ionic2没有编译到你添加到模块中的 组件视图 的内容，因为不会 主动去编译这种动态组件；
+  简单的概括心得：
+	1、对于模块化开发
+  a.在对于ionic2 page页面的项目结构来说，对于 比如像 tabs这种结构，一般情况下对于 每个tab 做一个 NgModule模块就可以了，这也是为了
+让 appModule 的可读性好一点；
+  b.我认为比较常用到的几个参数属性
+@NgModule 
+	declarations：这是用于加载 视图的属性，视图是指 组件、指令、管道
+	imports：引用的模块，不管是 ionic2自带的，还是申明的 功能模块
+	exports：declarations 的子集，可用于其它模块的组件模板（就是暴露当前想暴露的组件模板）
+	*entryComponents：这个是为了能够告诉 ionic2 你不想加载的 组件 ，我主动告诉你需要 编译 加载；
+
+	providers - 服务的创建者，并加入到全局服务列表中，可用于应用任何部分。
+	bootstrap - 指定应用的主视图（称为根组件），它是所有其它视图的宿主。只有根模块才能设置bootstrap属性。
+@Component
+	template（templateUrl）：引用的 视图模板（html）
+	selector：对应的 选择器 别名 （这个在angular2中用的比较多，这个相当于是加载到 路由中的 名字）
+	providers - 组件所需服务的依赖注入提供商数组。 这是在告诉 Angular：该组件的构造函数需要一个HeroService服务，这样组件就可以
+从服务中获得英雄数据
+
+
+
+	2、对于页面的 视图上 ，为了让 视图 不显示 tabs的 方式
+a.隐藏全部子页面的 tabs ，统一配置的方式
+	imports:[
+		IonicModule.forRoot(MyApp,{
+		  tabsHideOnSubPages:"true" //隐藏全部子页面tabs
+	})
+	]
+b.对于用 根的 路由直接导航，不用 tabs的子路由导航
+	隐藏某个子页面的tabs ;   缺点：当子页面使用pop()方法退出时，父页面的任何事件都不响应。
+		
+	import{ App } from 'ionic-angular';          //1.引入App类
+	constructor(privateapp:App) {}                 //2.声明初始化app对象
+	this.app.getRootNav().push(nextPage);      //3.调用this.app.getRootNav() 从根页面跳转就可以了
+c.替代上面的方法
+	//当页面进入初始化的时候
+
+    	letelements = document.querySelectorAll(".tabbar");
+    	if(elements != null) {
+       	    Object.keys(elements).map((key) => { //Object.keys()方法，返回一个以key值形成数组，不管是数组还是对象，都会返回排过序的key值
+            elements[key].style.display ='none';
+            });
+    	}
+//当退出页面的时候
+
+ionViewWillLeave() {
+    letelements = document.querySelectorAll(".tabbar");
+    if(elements != null) {
+        Object.keys(elements).map((key) => {
+            elements[key].style.display ='flex';
+        });
+    }
+	3、对于组件和模块加载 的 深入理解
+理解：对于ionic2来说，webpack打包的时候其实是按需加载，但是对于 怎么识别 组件模板并且对其 进行编译；这个是一开始只是引用到declarations中；会
+报错，因为 并没有接收到 信息 要对这个 组件 要进行编译；接收到编译的 三种方式：
+	1）@NgModule.bootstrap列表中的组件（就是根组件）
+	2）路由器配置中的引用的组件
+	3）就是对于 NgModule中的 属性 entryComponents 中存在的 引用的 组件；（这种一般都是动态添加的）
+	
+	4、最近写直播，需要让屏幕显示横屏，这个需要用到一个插件，https://github.com/Exilz/cordova-plugin-screen-orientation.git，只能用这个才不会出错
+
+
+***********************对于整个项目，整个框架的自我理解********************************************
+***作用域这个概念 对于 ngModule，Componet,provider，pipe之类的常见东西
+	这篇文章是最好的解释：https://segmentfault.com/a/1190000009396664；
+	一个模块里，他可以存在有 组件，指令等，一系列完整功能的 视图 和 方法类；
+	一个组件只能在一个 模块里 declaration里；
+	对于 @ngModule装饰器，能够 用 import 属性 引用其他的 模块，同时通过 export 暴露出自己的 组件；
+
+	*************记住一句话 ：
+	如果我们需要在模块中使用导入模块中声明的组件，那我们需要在每个使用的模块中导入对应的模块
+	如果我们只是使用模块中定义的服务，那我们只需要在主模块中导入对应的模块**********************
+	*************在 AppModule 中，forRoot() 方法会导入路由模块中的指令和服务。但对于子模块来说，
+	forChild() 方法仅会导入路由模块中定义的指令，而不会再次导入模块中定义的服务。******************
+	*************对于ionic2中用到的 所有 cordova插件，都不是以模块的方式存在，而是以 provider（服务的方式存在），所以，只需要在主模块里引用一次就能够使用
+不需要多次引用在不同的模块里 ，在主模块里 相当于 就是对 服务的 注册
+	但是：对于在具体的 组件上引用时，需要对于 该 服务 进行引入 对应的 class类，需要进行对他 实例化 方式是在 constructor(public example:Example){}（这里就已经实例化了）
+*********************
+	对于装饰器而言，就是用来修饰元数据用的，主要的装饰器：
+	@ngModule、@Component、@Injectable（自定义服务）,@Pipe（自定义管道）、@Directive 当然还有其他的 很多装饰器
