@@ -84,13 +84,42 @@ ionViewWillLeave() {
 	
 	4、最近写直播，需要让屏幕显示横屏，这个需要用到一个插件，https://github.com/Exilz/cordova-plugin-screen-orientation.git，只能用这个才不会出错
 
+	5、对于在 ionic2上进行打包编译的时候，为了让整个项目运行起来不要那么卡，用 ionic cordova build android --prod来进行打包压缩
 
+
+************************真机上出现对应的 启动页完了的白屏 还有 启动慢，并且在启动慢中导致 应用出现 连接不到app问题的解决*********
+	1）白屏：这个需要用cordova-plugin-splashscreen这个插件，去阻止自动关闭改成手动关闭启动页；
+config.xml的配置:
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="AutoHideSplashScreen" value="false" />	 这个是重点，自动隐藏为false
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="FadeSplashScreen" value="false" /> 隐藏为 false
+主模块：app.component.ts中:
+	import { SplashScreen } from '@ionic-native/splash-screen';
+	import { Platform } from 'ionic-angular';
+export class MyApp {	
+  constructor(platform: Platform,splashScreen: SplashScreen) {
+    platform.ready().then(() => {
+      setTimeout(()=>{
+        splashScreen.hide();
+      },500)
+    });
+  }
+}
+	
 ***********************对于整个项目，整个框架的自我理解********************************************
 ***作用域这个概念 对于 ngModule，Componet,provider，pipe之类的常见东西
 	这篇文章是最好的解释：https://segmentfault.com/a/1190000009396664；
-	一个模块里，他可以存在有 组件，指令等，一系列完整功能的 视图 和 方法类；
-	一个组件只能在一个 模块里 declaration里；
-	对于 @ngModule装饰器，能够 用 import 属性 引用其他的 模块，同时通过 export 暴露出自己的 组件；
+	***********一个模块里，他可以存在有 组件，指令等，一系列完整功能的 视图 和 方法类；
+
+	***********一个组件只能在一个 模块里 declaration里；（组件、管道、指令三个看成是一种性质的 作用域）
+
+	***********对于 @ngModule装饰器，能够 用 import 属性 引用其他的 模块，同时通过 export 暴露出自己的 组件；
 
 	*************记住一句话 ：
 	如果我们需要在模块中使用导入模块中声明的组件，那我们需要在每个使用的模块中导入对应的模块
@@ -100,6 +129,12 @@ ionViewWillLeave() {
 	*************对于ionic2中用到的 所有 cordova插件，都不是以模块的方式存在，而是以 provider（服务的方式存在），所以，只需要在主模块里引用一次就能够使用
 不需要多次引用在不同的模块里 ，在主模块里 相当于 就是对 服务的 注册
 	但是：对于在具体的 组件上引用时，需要对于 该 服务 进行引入 对应的 class类，需要进行对他 实例化 方式是在 constructor(public example:Example){}（这里就已经实例化了）
-*********************
-	对于装饰器而言，就是用来修饰元数据用的，主要的装饰器：
+**************************
+
+	*********************对于装饰器而言，就是用来修饰元数据用的，主要的装饰器：
 	@ngModule、@Component、@Injectable（自定义服务）,@Pipe（自定义管道）、@Directive 当然还有其他的 很多装饰器
+	****************在整个项目中，可以把 组件、管道、指令三个看成是一种性质的 作用域，引用方式是一样的 
+（但是对于pipe，directive 不需要再组件里再次引用对应的class类）
+****************************************
+	*********************组件的构造函数会优先执行，当子组件输入属性变化时会自动调用 ngOnChanges 钩子，然后在调用 ngOnInit 钩子，所以在 ngOnInit 钩子内能获取到输入的属性
+**************************
