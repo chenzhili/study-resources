@@ -84,7 +84,7 @@
 * */
 
 /*
-* 第三方插件plugins一些比较实用的插件
+* 第三方和内置插件plugins一些比较实用的插件
 * */
 /**
  * 1、html-webpack-plugin ：主要功能就是生成HTML文件，并且可以根据 入口文件 来进入相应的文件
@@ -125,6 +125,15 @@
  * plugins:[
         new cssExtract("build/style.css") //这里的路径就是最后存放 提取出来的css 文件
    ]
+ */
+/**
+ * 3、UglifyJsPlugin：用于对于 js进行相应的压缩
+ * 安装：注意 这个是属于 webapck 内置的 插件，不需要安装，如果需要用到不同于当前版本的时候才安装
+ * 简单用法：
+ *      const let webpack = require("webpack");
+ *      plugins:[
+ *          new webpack.optimize.UglifyJsPlugin(), //这里要注意 对于 js文件 ，这个方法 识别不了 es6的语法会报错，当然可以先用 babel-loader进行转码就可以了
+ *      ]
  */
 /*
 * 对于比较重要的 loader
@@ -217,4 +226,18 @@
                             }),
                              exclude:"/node_modules/"
                          }
+ */
+/**
+ * 3、babel-laoder: 用于由于浏览器 不兼容现在 的es6或者es7的写法，而将js转换成 es5
+ * 安装：由于 用这个需要还需要一些依赖的插件 不然不行：npm install babel-loader babel-core babel-preset-es2015 --save-dev
+ * 基本用法:
+ *      module:{
+ *          rules:[
+ *              {
+                    test:/\.js$/,
+                    loader:"babel-loader",
+                    exclude:/node_modules/
+                }
+ *          ]
+ *      }
  */
