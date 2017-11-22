@@ -33,4 +33,9 @@
  * 网址：https://github.com/chenzhili/myselfStudyWeb/tree/master/live
  * master分支：是app
  * wap分支：是 web端
+ *
+ *
+ * 一个比较终极的插件，能够解决在移动端 同时在 android 和 ios 上都能正常播放 m3u8 格式的 插件；
+ * 网址：http://www.chplayer.com/
+ * 由于原声的 video 标签 对于 android 上大部分浏览器 播放不了 ，有些能够播放比如 腾讯 ；（原因是因为 ios 和 这少部分的浏览器 都自带有 播放器 所以能够播放） 
  */
