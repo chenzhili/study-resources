@@ -20,7 +20,8 @@
  *
  *            在一个仓库删除了本地和远程分支后，在另一个工作目录里其实识别不到，查看的话用
  *            使用命令   git remote show origin   ，可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息；
- *            用   git remote prune origin    更新 “远程”分支 信息，本地工作分支信息 需要手动删除
+ *            用   git remote prune origin    更新删除“远程”分支 信息，本地工作分支信息 需要手动删除
+ *            git fetch origin  //从远程仓库更新信息
  */
 /**
  * 2017/12/5
@@ -30,7 +31,7 @@
  *          1）还是要合并，去解决对应文件冲突，add 再 commit；（冲突是由于 git 不知道 你想用 哪一种方式，叫你自己选择）
  *          2）放弃这次 分支的合并 git merge --abort (这里要注意 如果 分支合并没有 conflict 这个 放弃合并是无效的)
  * 2、在第一次 clone的时候，只会 clone 默认的 master 分支的代码；如果想 拉取 其他分支的代码：
- *      git checkout -b 名称 origin/master
+ *      git checkout -b 名称 origin/名称
  * 3、git log 查看 commit 的记录
  *      查看详细历史,改动的代码和位置用： git log --patch ( git log -p)
  *
@@ -45,4 +46,19 @@
      1、查看暂存区和上一条 commit 的区别：git diff --staged（或 --cached）
      2、查看工作目录和暂存区的区别：git diff 不加选项参数
      3、查看工作目录和上一条 commit 的区别：git diff HEAD...
+ */
+/**
+ * 2017/12/6
+ * 1、对于rebase的理解： 就是指 可以 基于当前 的参照物，把当前分支 的提交的 commit 以 参照物为 基点，依次在 提交 一遍
+ *  git rebase 参照点(参照分支的 head指向的 commit)
+ *这里的图解解释很清楚：https://juejin.im/book/5a124b29f265da431d3c472e/section/5a1422a4f265da432b4a73cf
+ *
+ * git merge test
+ * 等价于
+ * 1）git checkout test
+ * 2）git rebase master （可以这样理解：把 test 分支 的 基础点 放到了 master 的 head（最新 commit）引用的 commit 上）
+ * 3）git checkout master
+ * 4）git merge test
+ *2、对于 amend：就是修改的意思，在 commit 的时候 会 替换掉当前 最新的 commit 的记录，不会生成新的
+ *  git commit --amend  (这个是 修改最新的提交)
  */
