@@ -28,7 +28,7 @@
  * 1、merge合并分支
  *      git merge 分支名称
  *      当然合并过程中就会出现 修改同一个文件的同一个位置的时候，会产生 conflict（冲突），这里出现两种选择：
- *          1）还是要合并，去解决对应文件冲突，add 再 commit；（冲突是由于 git 不知道 你想用 哪一种方式，叫你自己选择）
+ *          1）还是要合并，去解决对应文件冲突，add 再 commit；（冲突是由于 git 不知道 ，你想用 哪一种方式叫你自己选择）
  *          2）放弃这次 分支的合并 git merge --abort (这里要注意 如果 分支合并没有 conflict 这个 放弃合并是无效的)
  * 2、在第一次 clone的时候，只会 clone 默认的 master 分支的代码；如果想 拉取 其他分支的代码：
  *      git checkout -b 名称 origin/名称
@@ -49,7 +49,7 @@
  */
 /**
  * 2017/12/6
- * 1、对于rebase的理解： 就是指 可以 基于当前 的参照物，把当前分支 的提交的 commit 以 参照物为 基点，依次在 提交 一遍
+ * 1、对于rebase的理解： 就是指 可以 基于当前 的参照物，把当前分支 提交的 commit 以 参照物为 基点，依次在 提交 一遍
  *  git rebase 参照点(参照分支的 head指向的 commit)
  *这里的图解解释很清楚：https://juejin.im/book/5a124b29f265da431d3c472e/section/5a1422a4f265da432b4a73cf
  *
@@ -61,4 +61,27 @@
  * 4）git merge test
  *2、对于 amend：就是修改的意思，在 commit 的时候 会 替换掉当前 最新的 commit 的记录，不会生成新的
  *  git commit --amend  (这个是 修改最新的提交)
+ */
+/**
+ * 2017/12/7
+ * 两个偏移字符：
+ *^ 的用法：在 commit 的后面加一个或多个 ^ 号，可以把 commit 往回偏移，偏移的数量是 ^ 的数量。例如：master^ 表示 master 指向的 commit 之前的那个 commit；
+ *  HEAD^^ 表示 HEAD 所指向的 commit 往前数两个 commit。
+ *
+ *~~ 的用法：在 commit 的后面加上 ~ 号和一个数，可以把 commit 往回偏移，偏移的数量是 ~ 号后面的数。例如：HEAD~5 表示 HEAD 指向的 commit往前数 5 个 commit。
+ *
+ * ???????????????????????????????????对于 rebase 的 运用，还有问题??????????????????????????????????????????
+ *
+ * git rebase commit某一个
+ *  一般的 rebase，告诉 Git 的是「我要把当前 commit 以及它之前的 commits 重新提交到目标 commit 上去，这其中，
+ *  rebase 的「起点」是自动判定的：选取当前 commit 和目标 commit 在历史上的交叉点作为起点。但是 在用 --onto 可以指定 作用目标，提交起始点（不包含），提交终点
+ *
+ *
+ * 1、reset：就是 撤销 到 指定的 commit，撤销指定前面的 所有 commit （但是要注意 就是 push 到 远程仓库的，如果执行，由于 会比对 对应的commit，导致 撤销后不能 push，push后的 代码 就不能用这个命令了）
+ * git reset --hard 指定的commit (如 head^ 撤销最新的)
+ *
+ * 2、如果是想撤销 除了 最新 ，前面的 某一个 commit，直接 丢弃，有两种方法：
+ *      方法一：用 rebase的 交互式 git rebase -i head^^  （就是 从当前 最新提交 往回走两次,原理是显示从往回位置 后的所有 提交内容，我在编辑页面 删除需要删除的页面）
+ *      方法二：用 git rebase --onto 目标基点 起始点（不包含） 终点 （git rebase --onto HEAD^^ HEAD^ branch1）
+ *
  */
