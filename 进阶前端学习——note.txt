@@ -1,0 +1,44 @@
+高级工程师的要求，一次见学习方向
+ 
+五年前：2012年
+1、要求拥有一个自己开发的兼容各个浏览器操作DOM的库，要求里面自己能够事件Ajax
+2、flash as3.0 硕思闪客 反编译国外的 flash（韩国）
+3、原声js的考察 ES3.0
+4、网页三剑客
+5、jQuery版本 this 闭包 原型链 面向对象编程
+6、ie6双边距 hack
+
+
+
+2014年 移动端
+1、后端的概念开始前移 MVC backbone.js
+2、webapp 手机浏览器 HTML5 CSS3 Storage Webworks
+3、Canvas 游戏产品 2048 围住神经猫
+4、Components（web Component） <ss></ss> angular1 DI AOP MVC MVVM
+5、js的体积越来越大 -> js 后移
+6、SPA pushstate 方式 页面的路由
+自己得有一个 小后端
+/a/b PHP -> Proxy
+7、ES5 ["a","b"].indexOf("a"); zepto
+8、cmd amd
+
+
+2015年
+1、Node.js Linux 集群 负载均衡
+2、ES6 Babel
+
+2016年
+1、ES6 发版本 Node.js
+2、Angular1 React Vue Redux Vuex Service（DI）
+3、Angular Cordova React ReactNative
+4、nw.js pc端的编程 React-VR WebGl 3d起来了
+
+2017年
+ABC
+AI bigData Clound
+1、AI ruff nodeBots
+2、bigData 数据可视化 js图表css绘制图表
+3、CLOUND NodeJs
+
+
+看到的一些好的 东西：fis3（看看） yarn（替换 cnpm 比这还快）
