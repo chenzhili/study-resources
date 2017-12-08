@@ -81,7 +81,15 @@
  * git reset --hard 指定的commit (如 head^ 撤销最新的)
  *
  * 2、如果是想撤销 除了 最新 ，前面的 某一个 commit，直接 丢弃，有两种方法：
- *      方法一：用 rebase的 交互式 git rebase -i head^^  （就是 从当前 最新提交 往回走两次,原理是显示从往回位置 后的所有 提交内容，我在编辑页面 删除需要删除的页面）
+ *      方法一：用 rebase的 交互式 git rebase -i head^^  （就是 从当前 最新提交 往回走两次,原理是显示从往回位置 后的所有 提交内容，我在编辑页面 删除需要删除的commit）
  *      方法二：用 git rebase --onto 目标基点 起始点（不包含） 终点 （git rebase --onto HEAD^^ HEAD^ branch1）
  *
+ */
+/**
+ * 2017/12/8
+ * 1、2017/12/7的第一点 ，说用了 reset 撤销到指定的commit，把前面的 commit 全部丢弃了，如果 push了的，不允许修改吗？
+ *      如果确定没有问题了： 用 git push origin 分支名称 -f (git push origin 分支名称 --force) 进行强行提交 （应用场景 在自己独立开发的分支上）
+ * 2、如果是在 master 分支上 ，最好就是在提交一次新的覆盖他；
+ *      git revert 指定的commit (git revert head^) head的指针是最新的 commit head^  往后移动一个
+ *      以前在弄这个问题，我都会 在编辑器里重新 编辑后提交，现在用 revert 会对 指定的 head 做 对应 反向操作，就抵消了 对应的操作，但是会 生成一个 新的 commit
  */
