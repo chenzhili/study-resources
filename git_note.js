@@ -93,3 +93,37 @@
  *      git revert 指定的commit (git revert head^) head的指针是最新的 commit head^  往后移动一个
  *      以前在弄这个问题，我都会 在编辑器里重新 编辑后提交，现在用 revert 会对 指定的 head 做 对应 反向操作，就抵消了 对应的操作，但是会 生成一个 新的 commit
  */
+/**
+ * 2017/12/11
+ * ************注意：不再被引用（直接或间接）指向的 commits 会在一定时间后被 Git 回收*************************
+ * 1、对于 reset 重置的理解: reset 就是把 当前的head 和 上面附带的 分支 重置到指定的 commit上，但是对于 暂存区和工作目录的操作 通过参数的不同会做出不同的操作
+ *      git reset --hard head^   重置到上一个 commit 并且 清空工作目录和 暂存区 的所有改动
+ *      git reset --soft head^   重置到上一个 commit 并且 保留工作目录和暂存区的内容，并把重置 HEAD 的位置所导致的新的文件差异(就是指 移动后 所有的 后代 commit)放进暂存区。
+ *      git reset --mixed head^  重置到上一个 commit 并且 保留工作目录的内容，并清空暂存区(把暂存区的 改动 放到 工作目录中)
+ *
+ *      在你 reset  中 不指定 参数的时候 ，默认用 --mixed
+ *
+ * 2、对于 git stash 和 git stash pop 的运用
+ *    运用场景：就是在紧急情况下 ，今天 需要 临时 打个包 发行，但是不需要你今天未开发 完整的 功能项目时候；
+ *
+ *    git stash 就是 把  “工作目录” 的代码 放到 一个 单独的存储空间，并没有提交到暂存区域；
+ *    然后 打包弄完了 ，切换到 你的 分支，把它取出来
+ *    git stash pop
+ *
+ *
+ * 3、checkout 指的是 检出，原理是可以 把 head 指向 到 指定的 commit上，但是 branch 不会发生变化（这是 与 reset 的最大的差别）
+ *
+ * 4、branch 删过了才想起来有用，想把它找回来  （这个一定要记住，在删除 branch的时候，并没有 删除 对应的 分支上的 所有 commit，但是不再被引用（直接或间接）指向的 commits 会在一定时间后被 Git 回收）
+ *      reflog 是"reference log" 的缩写，使用它可以查看 Git 仓库中的引用的移动记录。如果不指定引用，它会显示 HEAD 的移动记录。假如你误删了 branch1 这个 branch，那么你可以查看一下 HEAD 的移动历史
+ *     git reflog  查看所有的 引用 （可以用 git reflog 分支   只查看指定的 分支的 引用）
+ *
+ * 实现的步骤:
+ *   1、用 git reflog  查看所有的 引用，找到  从 master 分支上 移动到 删除分支(test)的 hash 记录，假设为 c03de9a
+ *   2、git checkout c03de9a 将 head 移动到 这个 commit 上
+ *   3、git checkout -b test  感觉又重新创建一次 test 分支
+ *   但是前提是 使用 reflog 来找回删除的 branch 的操作一定要及时，不然有可能会由于 commit 被回收而再也找不回来
+ */
+
+/*
+* 要学习的 tag：不可移动的 branch、cherry-pick：把选中的 commits 一个个合并进来、git config： Git 的设置、Git Flow：复杂又高效的工作流
+* */
