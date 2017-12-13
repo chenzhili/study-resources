@@ -138,3 +138,9 @@ export class MyApp {
 ****************************************
 	*********************组件的构造函数会优先执行，当子组件输入属性变化时会自动调用 ngOnChanges 钩子，然后在调用 ngOnInit 钩子，所以在 ngOnInit 钩子内能获取到输入的属性
 **************************
+
+3、https://segmentfault.com/a/1190000008809095 
+  对于 xss 的处理
+	在ionic2 中 如果想 在 iframe 中 动态添加 src，或者添加 标签等 如（<iframe [src]="变量"></iframe 或者 <div [innerHtml]="变量"></div>） 在 ionic2 中都显示 不受信任；
+
+	如果要想 强行 加入 ，就需要使用 DomSanitizer （上面这个网站就是对于这种的处理）
