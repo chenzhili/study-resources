@@ -49,7 +49,7 @@
  */
 /**
  * 2017/12/6
- * 1、对于rebase的理解： 就是指 可以 基于当前 的参照物，把当前分支 提交的 commit 以 参照物为 基点，依次在 提交 一遍
+ * 1、对于rebase的理解： 就是指 可以 基于当前 的参照物，把当前分支 提交的 commit 以 参照物为 基点，依次在 提交 一遍()
  *  git rebase 参照点(参照分支的 head指向的 commit)
  *这里的图解解释很清楚：https://juejin.im/book/5a124b29f265da431d3c472e/section/5a1422a4f265da432b4a73cf
  *
